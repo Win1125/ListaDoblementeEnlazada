@@ -146,7 +146,61 @@ int menuEstado(int x){
 
 //------------------------------------------- INSERCIÓN ------------------------------------------
 
+//Insertar Antes
+void insertarAntes(ListaDoble **ls, ListaDoble **nx){
+	
+	ListaDoble *q=capturarNodo(), *p=NULL, *r=*nx;
+	p=*ls;
+	
+	if(p!=r){
+		while(p->sig!=r){
+			p=p->sig;
+		}
+		q->sig=r;
+		p->sig=q;
+	}else{
+		q->sig=p;
+		*ls=q;
+	}		
+}
 
+
+//Insertar Despues
+void insertarDespues(ListaDoble **ls, ListaDoble **nx){
+	
+	ListaDoble *q=capturarNodo(),*p=NULL, *r=*nx;
+	p=*ls;
+	
+	while(p!=r){
+		p=p->sig;
+	}
+	
+	if(p->sig){
+		q->sig=p->sig;
+	}
+		
+	p->sig=q;		
+}
+
+//Insertar
+void insertar(ListaDoble **ls){
+	int op=0;
+	int nx;
+	ListaDoble *dn=NULL, *p=NULL;
+	p=*ls;
+	do{		
+		op=menuEstado(0);
+		if(op==1||op==2){
+			nx=capturarNumero();
+			if(buscarNodo(&p, &dn, nx))
+				switch(op){
+					case 1: insertarAntes(&p,&dn);break;
+					case 2:	insertarDespues(&p,&dn);
+				}
+		}		
+	}while(op!=4);
+	*ls=p;
+}
 
 //------------------------------------------ FIN INSERCIÓN -----------------------------------------
 
@@ -230,11 +284,11 @@ int seleccionMenu(){
 }
 
 //VER MENU
-int menu(ListaDoble **lista){	
+int menu(ListaDoble **ls){	
 
 	int opcion;	
 	
-	ListaDoble *p = *lista;
+	ListaDoble *p = *ls;
 	
 	do{
 		opcion=seleccionMenu();
@@ -251,7 +305,7 @@ int menu(ListaDoble **lista){
 				//Inserción
 				system("cls");	
 				cout<<"Insertar a la lista\n";
-				
+				insertar(&p);
 				break;
 			case 3:
 				//Eliminación
@@ -275,6 +329,7 @@ int menu(ListaDoble **lista){
 		}
 		
 	}while(opcion!=6);
+	*ls=p;
 }
 
 //---------------------------------------- FIN MENUS ---------------------------------------------
@@ -283,8 +338,8 @@ int main(){
 
 	setlocale(LC_ALL, "spanish");
 	
-	ListaDoble *lista = NULL;
-	menu(&lista);
+	ListaDoble *ls = NULL;
+	menu(&ls);
 	
 	cout<<"\n\n";
 	return 0;
