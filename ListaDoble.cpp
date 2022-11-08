@@ -210,7 +210,89 @@ void insertar(ListaDoble **ls){
 
 //------------------------------------------ ELIMINACIÓN -------------------------------------------
 
+void eliminarAntes(ListaDoble **ls, ListaDoble **nx){
+	
+	ListaDoble *s=NULL, *p=NULL, *r=NULL;
+	p=*ls;
+	r=*nx;
+	
+	if(p!=r){	
+		if(p->sig==r)			
+			*ls=r;						
+		else{  
+			while(p->sig!=r){		
+				s=p;
+				p=p->sig;
+			}
+			s->sig=p->sig;					
+		}
+		delete p; 
+	}else{
+		cout<<"No se puede elimianr antes de la cabeza...";
+	}
+	
+	cout<<"\n";
+	system("pause");	
+}
 
+void eliminarDespues(ListaDoble **ls, ListaDoble **nx){
+	
+	ListaDoble *q,*p=*ls, *r=*nx;
+	
+	if(r->sig){
+		q=r->sig;
+		r->sig=q->sig;
+		delete q;
+	}else{
+		cout<<"\nNo se puede elimianr despues de la cola...";
+	}
+		
+	cout<<"\n";system("pause");	
+}
+
+void eliminarRefencia(ListaDoble **ls, ListaDoble **nx){
+	
+	ListaDoble *p=*ls, *r=*nx;
+	
+	if(p!=r){
+		while(p->sig!=r)p=p->sig;
+		p->sig=r->sig;			
+	}else{
+		*ls=p->sig;	
+	}
+		
+	delete r;
+}
+
+void eliminar(ListaDoble **ls){
+	
+	int op=0;
+	int nx;
+	ListaDoble *dn=NULL, *p;
+	p=*ls;
+	
+	do{		
+		op=menu(1);
+		if(op==1||op==2||op==3){
+			nx=capNbr();
+			if(buscar(&p, &dn, nx)){
+				switch(op){
+					case 1: 
+						eliminarAntes(&p,&dn);
+						break;
+					case 2:	
+						eliminarDespues(&p,&dn);
+						break;
+					case 3: 
+						eliminarReferencia(&p,&dn);
+						break;
+				}
+			}
+		}		
+	}while(op!=4);
+	
+	*ls=p;
+}
 
 //------------------------------------------ FIN ELIMINACIÓN -----------------------------------------
 
@@ -223,6 +305,7 @@ void insertar(ListaDoble **ls){
 
 
 //------------------------------------------ FIN ACTUALIZACIÓN -----------------------------------------
+
 
 
 
@@ -263,6 +346,8 @@ void verLista_Anterior(ListaDoble *ls){
 }
 
 //------------------------------------------FIN RECORRIDO-----------------------------------------
+
+
 
 
 
@@ -311,7 +396,7 @@ int menu(ListaDoble **ls){
 				//Eliminación
 				system("cls");	
 				cout<<"Eliminar de la lista\n";
-				
+				eliminar(&p);
 				break;
 			case 4:
 				//Actualización
@@ -333,6 +418,10 @@ int menu(ListaDoble **ls){
 }
 
 //---------------------------------------- FIN MENUS ---------------------------------------------
+
+
+
+
 
 int main(){
 
